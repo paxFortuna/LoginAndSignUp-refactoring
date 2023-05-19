@@ -4,6 +4,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'dart:io' as io;
 
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
 class DbHelper {
   static Database? _db;
 
@@ -26,7 +28,20 @@ class DbHelper {
       return _db!;
     }
     _db = await initDb();
+    // _db = await testInitDb();
     return _db!;
+  }
+
+  testInitDb() async {
+    var databaseFactory = databaseFactoryFfi;
+    var db = await databaseFactory.openDatabase(
+      inMemoryDatabasePath,
+      options: OpenDatabaseOptions(
+        onCreate: _onCreate,
+        version: version,
+      ),
+    );
+    return db;
   }
 
   initDb() async {
@@ -128,7 +143,7 @@ class DbHelper {
   Future<int?> queryRowCount() async {
     var dbClient = await db;
     return Sqflite.firstIntValue(
-        await dbClient.rawQuery('SELECT COUNT(*) FROM $tableUser'));
+        await dbClient.rawQuery('SELECT _id FROM $tableUser'));
   }
 
   // cUserID: String , int cID : _id 있어야 한다!!

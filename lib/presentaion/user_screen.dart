@@ -304,7 +304,7 @@ class _UserScreenState extends State<UserScreen> {
     );
   }
 
-  Future<Navigator> _navigator(BuildContext context, Widget widget) async {
+  Future _navigator(BuildContext context, Widget widget) async {
     return await Navigator.push(
         context, MaterialPageRoute(builder: (context) => widget));
   }
